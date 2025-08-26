@@ -1,17 +1,20 @@
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.m?js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-react", "@babel/preset-env"],
-            plugins: ["@babel/plugin-transform-runtime"],
-          },
-        },
-      },
-    ],
+let { merge } = require("webpack-merge");
+let HtmlWebpackPlugin = require("html-webpack-plugin");
+let commonConfig = require("./webpack.common");
+
+let devConfig = {
+  mode: "development",
+  devServer: {
+    port: 8081,
+    historyApiFallback: {
+      index: "index.html",
+    },
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+    }),
+  ],
 };
+
+module.exports = merge(commonConfig, devConfig);
