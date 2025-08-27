@@ -1,5 +1,6 @@
 let { merge } = require("webpack-merge");
 let HtmlWebpackPlugin = require("html-webpack-plugin");
+let ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 let commonConfig = require("./webpack.common");
 
 let devConfig = {
@@ -11,6 +12,12 @@ let devConfig = {
     },
   },
   plugins: [
+    new ModuleFederationPlugin({
+      name: "container",
+      remotes: {
+        marketing: "marketing@http://localhost:8081/remoteEntry.js",
+      },
+    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
