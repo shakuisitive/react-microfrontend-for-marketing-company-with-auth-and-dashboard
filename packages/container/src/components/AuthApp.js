@@ -8,6 +8,9 @@ export default () => {
 
   useEffect(() => {
     let { onParentNavigate } = mount(ref.current, {
+      onSignIn() {
+        console.log("User signed in");
+      },
       initialPath: history.location.pathname,
       onNavigate({ pathname: nextPathName }) {
         let { pathname } = history.location;
