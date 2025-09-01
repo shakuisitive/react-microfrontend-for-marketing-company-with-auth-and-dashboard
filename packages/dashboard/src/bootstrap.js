@@ -1,37 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import { createMemoryHistory, createBrowserHistory } from "history";
+import { createApp } from "vue";
+import Dashboard from "./components/Dashboard.vue";
 
-function mount(el, { onSignIn, onNavigate, defaultHistory, initialPath }) {
-  let history =
-    defaultHistory ||
-    createMemoryHistory({
-      initialEntries: [initialPath],
-    });
-
-  if (onNavigate) {
-    history.listen(onNavigate);
-  }
-
-  ReactDOM.render(<App onSignIn={onSignIn} history={history} />, el);
-
-  return {
-    onParentNavigate({ pathname: nextPathName }) {
-      if (history.pathname !== nextPathName) {
-        history.push(nextPathName);
-      }
-    },
-  };
+function mount(el) {
+  let app = createApp(Dashboard);
+  app.mount(el);
 }
 
 if (process.env.NODE_ENV === "development") {
-  let devRoot = document.querySelector("#_auth-dev-root");
+  let devRoot = document.querySelector("#_dashboard-dev-root");
 
   if (devRoot) {
-    mount(devRoot, {
-      defaultHistory: createBrowserHistory(),
-    });
+    mount(devRoot);
   }
 }
 
