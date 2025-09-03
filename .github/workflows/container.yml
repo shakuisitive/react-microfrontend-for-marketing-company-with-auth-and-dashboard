@@ -1,4 +1,4 @@
-name: deploy-container
+name: Deploy to S3
 
 on:
   push:
@@ -12,17 +12,31 @@ defaults:
     working-directory: packages/container
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - run: npm install
-      - run: npm run build
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: shinyinc/action-aws-cli@v1.2
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Sync to S3
+        uses: jakejarvis/s3-sync-action@master
         env:
+          AWS_S3_BUCKET: "shakuisitive-microfrontend"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: eu-north-1
+          AWS_REGION: "eu-north-1"
+          SOURCE_DIR: "packages/container/dist"
+          DEST_DIR: "container/latest"
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*'
