@@ -1,15 +1,15 @@
-name: deploy-container
+name: deploy-marketing
 
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/container/**"
+      - "packages/marketing/**"
 
 defaults:
   run:
-    working-directory: packages/container
+    working-directory: packages/marketing
 
 jobs:
   deploy:
@@ -28,8 +28,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-        env:
-          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
 
       - name: Sync to S3
         uses: jakejarvis/s3-sync-action@master
@@ -38,8 +36,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-north-1"
-          SOURCE_DIR: "packages/container/dist"
-          DEST_DIR: "container/latest"
+          SOURCE_DIR: "packages/marketing/dist"
+          DEST_DIR: "marketing/latest"
         with:
           args: --follow-symlinks --delete --exclude '.git/*'
 
@@ -47,7 +45,7 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-          PATHS: "/container/latest/index.html"
+          PATHS: "/marketing/latest/remoteEntry.js"
           AWS_REGION: "eu-north-1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
