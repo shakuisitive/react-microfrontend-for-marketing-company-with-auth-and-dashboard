@@ -9,8 +9,10 @@ function mount(el, { onNavigate }) {
   // doing below will trigger a change in container
   // each time there's a change in this marketing remote app
 
-  history.listen(onNavigate);
-
+  if (onNavigate) {
+    // doing this condition so things work in isolation too
+    history.listen(onNavigate);
+  }
   ReactDOM.render(<App history={history} />, el);
 }
 
@@ -18,7 +20,7 @@ if (process.env.NODE_ENV === "development") {
   let devRoot = document.querySelector("#_marketing-dev-root");
 
   if (devRoot) {
-    mount(devRoot);
+    mount(devRoot, {});
   }
 }
 
