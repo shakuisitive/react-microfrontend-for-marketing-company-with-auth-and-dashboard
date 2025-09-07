@@ -3,8 +3,12 @@ import ReactDOM from "react-dom";
 import { createMemoryHistory, createBrowserHistory } from "history";
 import App from "./App";
 
-function mount(el, { onNavigate, defaultHistory }) {
-  let history = defaultHistory || createMemoryHistory();
+function mount(el, { onNavigate, defaultHistory, initialPath }) {
+  let history =
+    defaultHistory ||
+    createMemoryHistory({
+      initialEntries: [initialPath],
+    });
 
   // doing below will trigger a change in container
   // each time there's a change in this auth remote app

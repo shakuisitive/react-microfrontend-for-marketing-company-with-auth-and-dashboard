@@ -9,6 +9,7 @@ export default () => {
 
   useEffect(() => {
     let { onParentNavigate } = mount(ref.current, {
+      initialPath: history.location.pathname,
       onNavigate(location) {
         // the location parameter will give us the object
         // that will give us path of the remote app i.e. marketing app
