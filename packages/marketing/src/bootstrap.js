@@ -14,6 +14,15 @@ function mount(el, { onNavigate }) {
     history.listen(onNavigate);
   }
   ReactDOM.render(<App history={history} />, el);
+
+  return {
+    onParentNavigate({ pathname: nextPathName }) {
+      let { pathname } = history.location;
+      if (pathname !== nextPathName) {
+        history.push(nextPathName);
+      }
+    },
+  };
 }
 
 if (process.env.NODE_ENV === "development") {

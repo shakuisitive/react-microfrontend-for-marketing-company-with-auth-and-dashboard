@@ -8,7 +8,7 @@ export default () => {
   // this history object will give us the ability to change container's browser history path
 
   useEffect(() => {
-    mount(ref.current, {
+    let { onParentNavigate } = mount(ref.current, {
       onNavigate(location) {
         // the location parameter will give us the object
         // that will give us path of the remote app i.e. marketing app
@@ -20,6 +20,8 @@ export default () => {
         }
       },
     });
+
+    history.listen(onParentNavigate);
   }, []);
 
   return <div ref={ref} />;
