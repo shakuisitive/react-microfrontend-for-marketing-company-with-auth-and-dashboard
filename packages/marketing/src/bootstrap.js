@@ -3,8 +3,13 @@ import ReactDOM from "react-dom";
 import { createMemoryHistory } from "history";
 import App from "./App";
 
-function mount(el) {
+function mount(el, { onNavigate }) {
   let history = createMemoryHistory();
+
+  // doing below will trigger a change in container
+  // each time there's a change in this marketing remote app
+
+  history.listen(onNavigate);
 
   ReactDOM.render(<App history={history} />, el);
 }
