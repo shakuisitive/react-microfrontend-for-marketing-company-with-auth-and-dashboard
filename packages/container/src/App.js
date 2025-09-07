@@ -8,6 +8,8 @@ import Header from "./components/Header";
 // import MarketingApp from "./components/MarketingApp";
 // import AuthApp from "./components/AuthApp";
 
+import Progress from "./components/Progress";
+
 let MarketingLazy = lazy(() => import("./components/MarketingApp"));
 let AuthLazy = lazy(() => import("./components/AuthApp"));
 
@@ -21,7 +23,7 @@ export default () => {
       <StylesProvider generateClassName={generateClassName}>
         <div>
           <Header />
-          <Suspense fallback={"loading"}>
+          <Suspense fallback={<Progress />}>
             <Switch>
               <Route path="/auth" component={AuthLazy} />
               <Route path="/" component={MarketingLazy} />
