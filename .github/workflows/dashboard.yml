@@ -1,0 +1,51 @@
+name: deploy-dashboard
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/dashboard/**"
+
+defaults:
+  run:
+    working-directory: packages/dashboard
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Sync to S3
+        uses: jakejarvis/s3-sync-action@master
+        env:
+          AWS_S3_BUCKET: "shakuisitive-microfrontend"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "eu-north-1"
+          SOURCE_DIR: "packages/dashboard/dist"
+          DEST_DIR: "dashboard/latest"
+        with:
+          args: --follow-symlinks --delete --exclude '.git/*'
+
+      - name: Invalidate CloudFront
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          PATHS: "/dashboard/latest/remoteEntry.js"
+          AWS_REGION: "eu-north-1"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
