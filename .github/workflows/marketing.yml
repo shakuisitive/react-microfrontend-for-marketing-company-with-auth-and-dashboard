@@ -3,7 +3,7 @@ name: deploy-marketing
 on:
   push:
     branches:
-      - main
+      - size
     paths:
       - "packages/marketing/**"
 
@@ -45,7 +45,7 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-          PATHS: "/marketing/latest/remoteEntry.js"
+          PATHS: "/marketing/latest/*"
           AWS_REGION: "eu-north-1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
