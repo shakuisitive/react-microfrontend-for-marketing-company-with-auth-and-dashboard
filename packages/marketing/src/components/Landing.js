@@ -16,7 +16,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <MaterialLink component={Link} to="/" color="inherit">
-        Your Website  - shakir
+        Your Website - shakir
       </MaterialLink>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -87,7 +87,7 @@ export default function Album() {
               color="textSecondary"
               paragraph
             >
-              Something short and leading about the collection below—its
+              Something super short and leading about the collection below—its
               contents, the creator, etc. Make it short and sweet, but not too
               short so folks don&apos;t simply skip over it entirely.
             </Typography>
